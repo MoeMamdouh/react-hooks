@@ -5,7 +5,10 @@ const EditUserForm = props => {
 
   useEffect(() => {
     setUser(props.currentUser);
-  }, [props]);
+    return () => {
+      console.log('clean up');
+    };
+  }, [props.currentUser]);
   // You can tell React to skip applying an effect if certain values haven’t changed between re-renders. [ props ]
 
   const handleInputChange = event => {
@@ -13,7 +16,9 @@ const EditUserForm = props => {
 
     setUser({ ...user, [name]: value });
   };
-
+  // console.log('Render EditUserForm');
+  // console.log('Render currentUser', props.currentUser);
+  // console.log('Render user', user);
   return (
     <form
       onSubmit={event => {
@@ -29,11 +34,12 @@ const EditUserForm = props => {
         value={user.name}
         onChange={handleInputChange}
       />
-      <label>Username</label>
+
+      <label>age</label>
       <input
         type="text"
-        name="username"
-        value={user.username}
+        name="age"
+        value={user.age}
         onChange={handleInputChange}
       />
       <button>Update user</button>

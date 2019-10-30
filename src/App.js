@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import AddUserForm from './forms/AddUserForm';
 import EditUserForm from './forms/EditUserForm';
 import UserTable from './tables/UserTable';
@@ -6,21 +6,37 @@ import UserTable from './tables/UserTable';
 const App = () => {
   // Data
   const usersData = [
-    { id: 1, name: 'Tania', username: 'floppydiskette' },
-    { id: 2, name: 'Craig', username: 'siliconeidolon' },
-    { id: 3, name: 'Ben', username: 'benisphere' },
+    { id: 1, name: 'User1', isOnline: true },
+    { id: 2, name: 'User2', isOnline: false },
+    { id: 3, name: 'User3', isOnline: true },
   ];
-
-  const initialFormState = { id: null, name: '', username: '' };
 
   // Setting state
   const [users, setUsers] = useState(usersData);
-  const [currentUser, setCurrentUser] = useState(initialFormState);
+  const [currentUser, setCurrentUser] = useState(null);
   const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    console.log('App useEffect');
+    if (currentUser) {
+      const myInterval = setInterval(() => {
+        const newUser = { ...currentUser, isOnline: !currentUser.isOnline };
+        setCurrentUser(newUser);
+        setUsers(
+          users.map(user => (user.id === currentUser.id ? newUser : user)),
+        );
+      }, 2000);
+      return () => {
+        console.log('-- App clean up ');
+        clearInterval(myInterval);
+      };
+    }
+  }, [currentUser]);
 
   // CRUD operations
   const addUser = user => {
-    user.id = users.length + 1;
+    user.id = new Date().getUTCMilliseconds();
+    // user.id = users.length + 1;
     setUsers([...users, user]);
   };
 
@@ -37,10 +53,12 @@ const App = () => {
   };
 
   const editRow = user => {
+    console.group('user ', user);
     setEditing(true);
 
-    setCurrentUser({ id: user.id, name: user.name, username: user.username });
+    setCurrentUser(user);
   };
+  console.log('users ', users);
 
   return (
     <div className="container">
@@ -69,6 +87,13 @@ const App = () => {
           <UserTable users={users} editRow={editRow} deleteUser={deleteUser} />
         </div>
       </div>
+      {currentUser ? (
+        <div className="center flex-large">
+          <h4>Current User</h4>
+          <h5>{currentUser.name}</h5>
+          <h5>{currentUser.isOnline ? 'Online ' : 'Offline'}</h5>
+        </div>
+      ) : null}
     </div>
   );
 };

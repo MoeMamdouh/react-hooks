@@ -5,7 +5,8 @@ const UserTable = props => (
     <thead>
       <tr>
         <th>Name</th>
-        <th>Username</th>
+        <th>Age</th>
+        <th>status</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -14,7 +15,11 @@ const UserTable = props => (
         props.users.map(user => (
           <tr key={user.id}>
             <td>{user.name}</td>
-            <td>{user.username}</td>
+
+            <td>{user.age}</td>
+            <td>
+              <span className={`dot ${user.isOnline ? 'active' : null} `} />
+            </td>
             <td>
               <button
                 onClick={() => {

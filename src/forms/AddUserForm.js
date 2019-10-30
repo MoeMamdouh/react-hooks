@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 
 const AddUserForm = props => {
-  const initialFormState = { id: null, name: '', username: '' };
+  const initialFormState = { id: null, name: '', isOnline: true };
   const [user, setUser] = useState(initialFormState);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
-
-    setUser({ ...user, [name]: value });
+    const newUser = { ...user, [name]: value };
+    console.log(' newUser', newUser);
+    setUser(newUser);
   };
 
   return (
     <form
       onSubmit={event => {
         event.preventDefault();
-        if (!user.name || !user.username) return;
+        // if (!user.name || !user.username) return;
 
         props.addUser(user);
         setUser(initialFormState);
@@ -27,11 +28,11 @@ const AddUserForm = props => {
         value={user.name}
         onChange={handleInputChange}
       />
-      <label>Username</label>
+      <label>age</label>
       <input
         type="text"
-        name="username"
-        value={user.username}
+        name="age"
+        value={user.age}
         onChange={handleInputChange}
       />
       <button>Add new user</button>

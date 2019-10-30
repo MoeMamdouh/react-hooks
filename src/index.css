@@ -3,3 +3,13 @@ button,
   margin-bottom: 0 !important;
   margin-right: 0.5rem;
 }
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #bbb;
+}
+.active {
+  background-color: #00ff00;
+}
